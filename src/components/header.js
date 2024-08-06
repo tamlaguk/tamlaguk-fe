@@ -29,7 +29,6 @@ export default Header;
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
   width: 390px;
   height: 63px;
   background-color: #f8f8f8;
@@ -41,14 +40,14 @@ const BackButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  margin-top: 5px;
   img {
-    width: 24px; /* 버튼 크기에 맞게 조절 */
-    height: 24px;
+    width: 20px; /* 버튼 크기에 맞게 조절 */
+    height: 20px;
   }
 `;
 
 const Logo = styled.img`
-  width: auto;
   height: 40px; /* 로고 크기에 맞게 조절 */
-  margin: 0 auto;
+  margin-left: 8px;
 `;
