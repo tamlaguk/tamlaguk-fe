@@ -6,6 +6,7 @@ import ReviewPage from "./pages/reviewPage";
 import TourPage from "./pages/tourPage";
 import FoodPage from "./pages/foodPage";
 import LeisurePage from "./pages/leisurePage";
+import UserPage from "./pages/userPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/food" element={<FoodPage />} />
         <Route path="/tour" element={<TourPage />} />
         <Route path="/leisure" element={<LeisurePage />} />
+        <Route path="/user" element={<UserPage />} />
       </Routes>
     </Router>
   );
