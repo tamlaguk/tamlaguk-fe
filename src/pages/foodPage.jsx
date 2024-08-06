@@ -7,11 +7,11 @@ import axios from "axios";
 import Tabbar from "../components/tabbar.js";
 
 const categories = [
-  { label: "한식", value: "korean" },
-  { label: "일식", value: "japanese" },
-  { label: "중식", value: "chinese" },
-  { label: "양식", value: "western" },
-  { label: "뷔페식", value: "buffet" },
+  { label: "한식", value: "한식" },
+  { label: "일식", value: "일식" },
+  { label: "중식", value: "중식" },
+  { label: "양식", value: "양식" },
+  { label: "뷔페식", value: "뷔페식" },
 ];
 
 const FoodPage = () => {
@@ -19,10 +19,10 @@ const FoodPage = () => {
 
   const handleButtonClick = async (category) => {
     try {
-      const response = await axios.get(`/food-review?category=${category}`);
+      const response = await axios.get(`http://localhost:8081/food-review?category=${category}`);
       console.log("Response data:", response.data); // 응답 데이터 콘솔에 출력
       const filteredData = response.data;
-      navigate("/review", { state: { data: filteredData } });
+      navigate("/review", { state: { data: filteredData, type: "food" } });
     } catch (error) {
       console.error("Error fetching data:", error); // 오류 콘솔에 출력
     }

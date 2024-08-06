@@ -7,8 +7,8 @@ import axios from "axios";
 import Tabbar from "../components/tabbar.js";
 
 const categories = [
-  { label: "무료", value: "free" },
-  { label: "유료", value: "charged" },
+  { label: "무료", value: "무료" },
+  { label: "유료", value: "유료" },
 ];
 
 const TourPage = () => {
@@ -16,10 +16,10 @@ const TourPage = () => {
 
   const handleButtonClick = async (category) => {
     try {
-      const response = await axios.get(`/food-review?category=${category}`);
+      const response = await axios.get(`http://localhost:8081/place-review?category=${category}`);
       console.log("Response data:", response.data); // 응답 데이터 콘솔에 출력
       const filteredData = response.data;
-      navigate("/review", { state: { data: filteredData } });
+      navigate("/review", { state: { data: filteredData, type: "tour" } });
     } catch (error) {
       console.error("Error fetching data:", error); // 오류 콘솔에 출력
     }
