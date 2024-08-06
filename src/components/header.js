@@ -1,8 +1,8 @@
 // Header.js
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import logoImage from "../uploads/logo.png";
-import backImage from "../uploads/back.png";
+import logoImage from "../images/logo.png";
+import backImage from "../images/back.png";
 
 const Header = ({ showBackButton = false }) => {
   const navigate = useNavigate();
