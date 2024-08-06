@@ -13,7 +13,6 @@ const MainPage = () => {
   };
 
   return (
-    <Container>
       <Header/>
       <ImageWrapper>
         <Image src={BaseImage} alt="Base Image"/>
@@ -87,5 +86,7 @@ const CloudText = styled.div`
   font-weight: bold;
   color: #57727F;
 `;
+  );
+};
 
 export default MainPage;

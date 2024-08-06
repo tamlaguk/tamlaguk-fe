@@ -7,6 +7,7 @@ import TourPage from "./pages/tourPage";
 import FoodPage from "./pages/foodPage";
 import LeisurePage from "./pages/leisurePage";
 import UserPage from "./pages/userPage";
+import UploadReviewPage from "./pages/uploadReviewPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/tour" element={<TourPage />} />
         <Route path="/leisure" element={<LeisurePage />} />
         <Route path="/user" element={<UserPage />} />
+        <Route path="/uploadReview" element={<UploadReviewPage />} />
       </Routes>
     </Router>
   );
