@@ -41,8 +41,8 @@ const MainPage = () => {
             <CloudText>관광</CloudText>
           </CloudWrapper>
         </ImageWrapper>
+        <Tabbar />
       </Container>
-      <Tabbar />
     </>
   );
 };
@@ -66,6 +66,7 @@ const Container = styled.div`
 
 const ImageWrapper = styled.div`
   position: relative;
+  height: 781px;
 `;
 
 const Image = styled.img`
