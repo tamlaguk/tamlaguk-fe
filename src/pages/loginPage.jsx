@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import KakaoLogin from 'react-kakao-login';
-import Header from "../components/header.js";
-import BaseImage from "../images/base.png";
+import BaseImage from "../images/base2.png";
+import Airplanin from "../images/airplain.png";
 import Kakaologin from "../images/kakaologin.png";
 
 const LoginPage = () => {
@@ -18,8 +18,8 @@ const LoginPage = () => {
 
   return (
     <Container>
-      <Header />
       <BackgroundImage src={BaseImage} alt="background" />
+      <AirplaneImage src={Airplanin} alt="airplane" />
       <LoginButtonWrapper>
         <KakaoButton
           token="<YOUR_KAKAO_APP_KEY>"
@@ -37,6 +37,15 @@ const LoginPage = () => {
 
 export default LoginPage;
 
+const bounce = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+`;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -44,6 +53,7 @@ const Container = styled.div`
   justify-content: center;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 `;
 
 const BackgroundImage = styled.img`
@@ -53,6 +63,14 @@ const BackgroundImage = styled.img`
   object-fit: cover;
 `;
 
+const AirplaneImage = styled.img`
+  position: absolute;
+  width: 200px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  animation: ${bounce} 2s infinite;
+`;
+
 const LoginButtonWrapper = styled.div`
   position: relative;
   display: flex;
@@ -60,7 +78,7 @@ const LoginButtonWrapper = styled.div`
   justify-content: center;
   width: 100%;
   height: 100%;
-  margin-top:200px;
+  margin-top: 200px;
 `;
 
 const KakaoButton = styled(KakaoLogin)`
