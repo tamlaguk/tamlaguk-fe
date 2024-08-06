@@ -211,6 +211,8 @@ const SearchModal = () => {
   );
 };
 
+export default SearchModal;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -332,5 +334,3 @@ const ButtonContainer = styled.button`
     cursor: pointer;
   }
 `;
-
-export default SearchModal;

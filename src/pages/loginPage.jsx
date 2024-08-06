@@ -1,9 +1,10 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
-import KakaoLogin from 'react-kakao-login';
+import React from "react";
+import styled, { keyframes } from "styled-components";
+import KakaoLogin from "react-kakao-login";
 import BaseImage from "../images/base2.png";
 import Airplanin from "../images/airplain.png";
 import Kakaologin from "../images/kakaologin.png";
+import Tabbar from "../components/tabbar.js";
 
 const LoginPage = () => {
   const handleKakaoLoginSuccess = (response) => {
@@ -26,7 +27,7 @@ const LoginPage = () => {
           onSuccess={handleKakaoLoginSuccess}
           onFailure={handleKakaoLoginFailure}
           buttonText="카카오로 로그인"
-          style={{ border: 'none', background: 'none', padding: 0 }}
+          style={{ border: "none", background: "none", padding: 0 }}
         >
           <KakaoImage src={Kakaologin} alt="kakao login" />
         </KakaoButton>

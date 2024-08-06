@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import Header from "../components/header.js";
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 import ReviewImage from "../images/reviewbase.png";
 import NextImage from "../images/next.png";
-import TypewriterText from '../components/typewriter';
-import ExampleAudio from '../images/예시.m4a';
+import TypewriterText from "../components/typewriter";
+import ExampleAudio from "../images/예시.m4a";
+import Tabbar from "../components/tabbar.js";
 
 const ReviewPage = () => {
-  const [placeName, setPlaceName] = useState('');
-  const [text, setText] = useState('');
-  const [audioSrc, setAudioSrc] = useState('');
+  const [placeName, setPlaceName] = useState("");
+  const [text, setText] = useState("");
+  const [audioSrc, setAudioSrc] = useState("");
   const [showButton, setShowButton] = useState(true);
   const [showSearchButton, setShowSearchButton] = useState(false);
   const [audioEnded, setAudioEnded] = useState(false);
@@ -19,18 +20,18 @@ const ReviewPage = () => {
     {
       name: "서울타워",
       text: "강아지 귀여워 귀여운건 힐링 힐링은 좋아",
-      audio: ExampleAudio
+      audio: ExampleAudio,
     },
     {
       name: "경복궁",
       text: "궁전의 아름다움, 역사의 숨결을 느끼다",
-      audio: ExampleAudio
+      audio: ExampleAudio,
     },
     {
       name: "한강공원",
       text: "도시 속 자연, 휴식과 힐링의 공간",
-      audio: ExampleAudio
-    }
+      audio: ExampleAudio,
+    },
   ];
 
   const fetchData = async () => {
@@ -54,7 +55,9 @@ const ReviewPage = () => {
   };
 
   const handleSearchClick = () => {
-    const kakaoUrl = `https://map.kakao.com/?q=${encodeURIComponent(placeName)}`;
+    const kakaoUrl = `https://map.kakao.com/?q=${encodeURIComponent(
+      placeName
+    )}`;
     window.location.href = kakaoUrl;
   };
 
@@ -69,38 +72,43 @@ const ReviewPage = () => {
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.addEventListener('ended', () => {
+      audioRef.current.addEventListener("ended", () => {
         setAudioEnded(true);
       });
     }
   }, []);
 
   return (
-    <Container>
-      <Header showBackButton={true} />
-      <BackgroundContainer>
-        <BackgroundImage src={ReviewImage} alt="background" />
-        {audioEnded && (
-          <NextButton src={NextImage} alt="next" onClick={handleNextClick} />
-        )}
-        <TextContainer>
-          <TypewriterText fullText={text} />
-        </TextContainer>
-        {showSearchButton && (
-          <SearchButtonContainer>
-            <SearchButton onClick={handleSearchClick}>
-              {placeName} 바로가기
-            </SearchButton>
-          </SearchButtonContainer>
-        )}
-        {showButton && (
-          <ButtonOverlay>
-            <ConfirmButton onClick={handleButtonClick}>시작하기!</ConfirmButton>
-          </ButtonOverlay>
-        )}
-      </BackgroundContainer>
-      <audio ref={audioRef} src={audioSrc} />
-    </Container>
+    <>
+      <Container>
+        <Header showBackButton={true} />
+        <BackgroundContainer>
+          <BackgroundImage src={ReviewImage} alt="background" />
+          {audioEnded && (
+            <NextButton src={NextImage} alt="next" onClick={handleNextClick} />
+          )}
+          <TextContainer>
+            <TypewriterText fullText={text} />
+          </TextContainer>
+          {showSearchButton && (
+            <SearchButtonContainer>
+              <SearchButton onClick={handleSearchClick}>
+                {placeName} 바로가기
+              </SearchButton>
+            </SearchButtonContainer>
+          )}
+          {showButton && (
+            <ButtonOverlay>
+              <ConfirmButton onClick={handleButtonClick}>
+                시작하기!
+              </ConfirmButton>
+            </ButtonOverlay>
+          )}
+        </BackgroundContainer>
+        <audio ref={audioRef} src={audioSrc} />
+      </Container>
+      <Tabbar />
+    </>
   );
 };
 
@@ -160,16 +168,15 @@ const SearchButtonContainer = styled.div`
 `;
 
 const SearchButton = styled.button`
-
-    width: 200px;
-    height: 50px;
-    padding: 8px 16px;
-    background-color: #fff;
-    color: black;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 17px;
+  width: 200px;
+  height: 50px;
+  padding: 8px 16px;
+  background-color: #fff;
+  color: black;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 17px;
 `;
 
 const NextButton = styled.img`
@@ -199,7 +206,7 @@ const ButtonOverlay = styled.div`
 
 const ConfirmButton = styled.button`
   padding: 15px 30px;
-  background-color: #FCD354;
+  background-color: #fcd354;
   color: white;
   border: none;
   border-radius: 50px;
