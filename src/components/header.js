@@ -1,4 +1,3 @@
-// Header.js
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import logoImage from "../images/logo.png";
@@ -31,7 +30,7 @@ const HeaderContainer = styled.div`
   align-items: center;
   width: 390px;
   height: 63px;
-  background-color: #f8f8f8;
+  background-color: #E3ECF1;
   padding: 0 10px;
   box-sizing: border-box;
 `;

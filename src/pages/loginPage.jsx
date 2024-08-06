@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import KakaoLogin from 'react-kakao-login';
-import Header from "../components/header.js";
 import BaseImage from "../images/base.png";
 import Kakaologin from "../images/kakaologin.png";
 
@@ -18,7 +17,6 @@ const LoginPage = () => {
 
   return (
     <Container>
-      <Header />
       <BackgroundImage src={BaseImage} alt="background" />
       <LoginButtonWrapper>
         <KakaoButton
