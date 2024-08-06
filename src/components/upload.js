@@ -16,6 +16,8 @@ const SearchModal = () => {
   const [timeLeft, setTimeLeft] = useState(15);
   const [category, setCategory] = useState("맛집");
   const [inputValue, setInputValue] = useState("");
+  const [responseOk, setResponseOk] = useState(true);
+  const [postid, setPostid] = useState("");
   const mediaRecorderRef = useRef(null);
   const audioRef = useRef([]);
   const timerRef = useRef(null);
@@ -83,7 +85,7 @@ const SearchModal = () => {
   const handleConfirmClick = async () => {
     let uploadUrl = "";
     if (category === "맛집") {
-      uploadUrl = `http://localhost:8081/food-reviewposts?name=${encodeURIComponent(
+      uploadUrl = `http://localhost:8081/food-review?name=${encodeURIComponent(
         inputValue
       )}`;
     } else if (category === "레저") {
@@ -101,11 +103,17 @@ const SearchModal = () => {
       });
 
       if (response.ok) {
+        const data = await response.json();
+        setPostid(data.postid);
+        setResponseOk(true);
         console.log("GET 요청 성공");
       } else {
+        setResponseOk(false);
+        alert("카테고리나 명칭 확인을 다시 한 번 해주세요")
         console.error("GET 요청 실패");
       }
     } catch (error) {
+      setResponseOk(false);
       console.error("Error making GET request:", error);
     }
   };
@@ -123,18 +131,18 @@ const SearchModal = () => {
   }
 
   const uploadAudio = async () => {
-    if (audioUrl) {
+    if (audioUrl && postid) {
       const audioBlob = await fetch(audioUrl).then((res) => res.blob());
       const formData = new FormData();
       formData.append("file", audioBlob, "recording.wav");
 
-      const uploadUrl = "";
+      let uploadUrl = "";
       if (category === "맛집") {
-        uploadUrl = "http://localhost:8081/food-review/";
+        uploadUrl = `http://localhost:8081/food-review/${postid}`;
       } else if (category === "레저") {
-        uploadUrl = "http://localhost:8081/activity-review/";
+        uploadUrl = `http://localhost:8081/activity-review/${postid}`;
       } else if (category === "관광지") {
-        uploadUrl = "http://localhost:8081/place-review/";
+        uploadUrl = `http://localhost:8081/place-review/${postid}`;
       }
       try {
         const response = await fetch(uploadUrl, {
@@ -210,19 +218,21 @@ const SearchModal = () => {
             <audio src={audioUrl} controls />
           </div>
         )}
-        <RecordButton
-          onClick={startRecording}
-          disabled={listening || isRecording || inputValue == ""}
-        >
-          <img
-            src={
-              listening || isRecording || inputValue == ""
-                ? notRecordingImage
-                : recordingImage
-            }
-            alt="녹음 버튼"
-          />
-        </RecordButton>
+        {responseOk && (
+          <RecordButton
+            onClick={startRecording}
+            disabled={listening || isRecording}
+          >
+            <img
+              src={
+                listening || isRecording
+                  ? notRecordingImage
+                  : recordingImage
+              }
+              alt="녹음 버튼"
+            />
+          </RecordButton>
+        )}
         <ButtonContainer>
           <UploadButton onClick={uploadAudio} disabled={!audioUrl}>
             업로드
