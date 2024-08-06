@@ -29,8 +29,10 @@ const TypewriterText = ({ fullText }) => {
 };
 
 const Text = styled.p`
-  font-size: 19px;
+  font-size: 20px;
   color: #fff;
+  font-weight: bold; /* 폰트를 굵게 설정 */
 `;
+
 
 export default TypewriterText;

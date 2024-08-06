@@ -12,6 +12,7 @@ const ReviewPage = () => {
   const [audioSrc, setAudioSrc] = useState('');
   const [showButton, setShowButton] = useState(true);
   const [showSearchButton, setShowSearchButton] = useState(false);
+  const [audioEnded, setAudioEnded] = useState(false);
   const audioRef = useRef(null);
 
   const mockData = [
@@ -39,6 +40,7 @@ const ReviewPage = () => {
     setPlaceName(data.name);
     setText(data.text);
     setAudioSrc(data.audio);
+    setAudioEnded(false);
   };
 
   const handleButtonClick = () => {
@@ -57,19 +59,30 @@ const ReviewPage = () => {
   };
 
   const handleNextClick = async () => {
-    await fetchData();
-    if (audioRef.current) {
-      audioRef.current.play();
+    if (audioEnded) {
+      await fetchData();
+      if (audioRef.current) {
+        audioRef.current.play();
+      }
     }
   };
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.addEventListener('ended', () => {
+        setAudioEnded(true);
+      });
+    }
+  }, []);
 
   return (
     <Container>
       <Header showBackButton={true} />
       <BackgroundContainer>
         <BackgroundImage src={ReviewImage} alt="background" />
-        <Overlay />
-        <NextButton src={NextImage} alt="next" onClick={handleNextClick} />
+        {audioEnded && (
+          <NextButton src={NextImage} alt="next" onClick={handleNextClick} />
+        )}
         <TextContainer>
           <TypewriterText fullText={text} />
         </TextContainer>
@@ -121,16 +134,6 @@ const BackgroundImage = styled.img`
   object-fit: cover;
 `;
 
-const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
-  z-index: 1;
-`;
-
 const TextContainer = styled.div`
   position: absolute;
   width: 190px;
@@ -157,15 +160,16 @@ const SearchButtonContainer = styled.div`
 `;
 
 const SearchButton = styled.button`
-  width: 100%;
-  height: 50px;
-  padding: 8px 16px;
-  background-color: #fff;
-  color: black;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: 20px;
+
+    width: 200px;
+    height: 50px;
+    padding: 8px 16px;
+    background-color: #fff;
+    color: black;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 17px;
 `;
 
 const NextButton = styled.img`
@@ -177,6 +181,7 @@ const NextButton = styled.img`
   height: 35px;
   cursor: pointer;
   z-index: 2;
+  transition: opacity 0.5s ease;
 `;
 
 const ButtonOverlay = styled.div`
