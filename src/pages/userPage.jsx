@@ -53,8 +53,8 @@ const UserPage = () => {
     <>
     <Container>
       <Header showBackButton={true} />
-      <Content>
         <Title>작성한 리뷰보기</Title>
+      <Content>
         {reviews.length > 0 ? (
           <ReviewList>
             {reviews.map((review) => (
@@ -91,22 +91,23 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  padding-top: 70px; /* 헤더 아래에 여백 추가 */
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
   background-color: #E3ECF1;
   width: 390px;
+  min-height: 781px;
 `;
 
 
 const Title = styled.h1`
   font-size: 20px;
   color: #154D78;
-  margin-bottom: 30px;
   text-align: center;
   font-weight: bold;
+  background-color: #E3ECF1;
+  width: 390px;
+  padding-top: 70px;
+  padding-bottom: 30px;
 `;
 
 
