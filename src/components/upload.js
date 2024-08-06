@@ -4,7 +4,9 @@ import Header from "./header";
 import micImage from "../images/micicon.png";
 import notRecordingImage from "../images/notRecording.png";
 import recordingImage from "../images/Recording.png";
-import { useRef, useState } from "react";
+import stopvoiceImage from "../images/stopVoice.png"
+import { useRef, useState,useEffect } from "react";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 
 const SearchModal = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -16,6 +18,19 @@ const SearchModal = () => {
   const audioRef = useRef([]);
   const timerRef = useRef(null);
   const inputRef = useRef(null);
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition
+  } = useSpeechRecognition();
+
+  useEffect(() => {
+    if (transcript) {
+      setInputValue(transcript);
+    }
+  }, [transcript]);
 
   const startRecording = async () => {
     // 기존 녹음 데이터 초기화
@@ -119,7 +134,18 @@ const SearchModal = () => {
       console.error("Error making GET request:", error);
     }
   };
+  const toggleListening = () => {
+    if (listening) {
+      SpeechRecognition.stopListening();
+    } else {
+      resetTranscript();
+      SpeechRecognition.startListening({ continuous: true, language: 'ko' });
+    }
+  };
 
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
   return (
     <Container>
       <Wrap>
@@ -146,8 +172,8 @@ const SearchModal = () => {
         <SearchInputBox>
           {/* <a href="https://www.flaticon.com/kr/free-icons/" title="마이크 아이콘">마이크 아이콘 제작자: Kiranshastry - Flaticon</a> */}
           <MicContainer>
-            <VoiceButton>
-              <img src={micImage} alt="원하는 곳 검색" />
+          <VoiceButton onClick={toggleListening}>
+              <img src={listening ? stopvoiceImage : micImage} alt="원하는 곳 검색" />
             </VoiceButton>
           </MicContainer>
           <h1>정확한 명칭을 말해주세요</h1>
