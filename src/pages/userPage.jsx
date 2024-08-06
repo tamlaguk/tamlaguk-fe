@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/header'; // Header 컴포넌트의 경로 수정
 import styled from 'styled-components';
-import axios from 'axios';
+import Tabbar from "../components/tabbar.js";
 
 const mockReviews = [
   {
@@ -50,6 +50,7 @@ const UserPage = () => {
   }, []);
 
   return (
+    <>
     <Container>
       <Header showBackButton={true} />
       <Content>
@@ -74,6 +75,8 @@ const UserPage = () => {
         )}
       </Content>
     </Container>
+    <Tabbar/>
+    </>
   );
 };
 

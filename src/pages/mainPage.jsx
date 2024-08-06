@@ -1,9 +1,10 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/header.js";
-import styled, { keyframes } from 'styled-components';
-import BaseImage from '../images/baseBig.png';
-import Cloud from '../images/cloud.png';
+import styled, { keyframes } from "styled-components";
+import BaseImage from "../images/baseBig.png";
+import Cloud from "../images/cloud.png";
+import Tabbar from "../components/tabbar.js";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -13,24 +14,36 @@ const MainPage = () => {
   };
 
   return (
-    <Container>
-      <Header/>
-      <ImageWrapper>
-        <Image src={BaseImage} alt="Base Image"/>
-        <CloudWrapper style={{ top: '20%', left: '9%' }} onClick={() => navigateTo('/food')}>
-          <CloudImage src={Cloud} alt="Cloud Image"/>
-          <CloudText>식당</CloudText>
-        </CloudWrapper>
-        <CloudWrapper style={{ top: '8%', left: '56%' }} onClick={() => navigateTo('/leisure')}>
-          <CloudImage src={Cloud} alt="Cloud Image"/>
-          <CloudText>레저</CloudText>
-        </CloudWrapper>
-        <CloudWrapper style={{ top: '43%', left: '65%' }} onClick={() => navigateTo('/tour')}>
-          <CloudImage src={Cloud} alt="Cloud Image"/>
-          <CloudText>관광</CloudText>
-        </CloudWrapper>
-      </ImageWrapper>
-    </Container>
+    <>
+      <Container>
+        <Header />
+        <ImageWrapper>
+          <Image src={BaseImage} alt="Base Image" />
+          <CloudWrapper
+            style={{ top: "20%", left: "9%" }}
+            onClick={() => navigateTo("/food")}
+          >
+            <CloudImage src={Cloud} alt="Cloud Image" />
+            <CloudText>식당</CloudText>
+          </CloudWrapper>
+          <CloudWrapper
+            style={{ top: "8%", left: "56%" }}
+            onClick={() => navigateTo("/leisure")}
+          >
+            <CloudImage src={Cloud} alt="Cloud Image" />
+            <CloudText>레저</CloudText>
+          </CloudWrapper>
+          <CloudWrapper
+            style={{ top: "43%", left: "65%" }}
+            onClick={() => navigateTo("/tour")}
+          >
+            <CloudImage src={Cloud} alt="Cloud Image" />
+            <CloudText>관광</CloudText>
+          </CloudWrapper>
+        </ImageWrapper>
+      </Container>
+      <Tabbar />
+    </>
   );
 };
 
@@ -85,6 +98,6 @@ const CloudText = styled.div`
   transform: translate(-50%, -50%);
   font-size: 18px;
   font-weight: bold;
-  color: #57727F;
+  color: #57727f;
 `;
 export default MainPage;
