@@ -16,7 +16,7 @@ const SearchModal = () => {
   const [timeLeft, setTimeLeft] = useState(15);
   const [category, setCategory] = useState("맛집");
   const [inputValue, setInputValue] = useState("");
-  const [responseOk, setResponseOk] = useState(true);
+  const [responseOk, setResponseOk] = useState(false);
   const [postid, setPostid] = useState("");
   const mediaRecorderRef = useRef(null);
   const audioRef = useRef([]);
