@@ -1,5 +1,5 @@
 # Build stage
-FROM krmp-d2hub-idock.9rum.cc/goorm/node:16
+FROM node:20.12.1
 WORKDIR /usr/src/app
 RUN mkdir build
 COPY krampoline/build/ ./build/
