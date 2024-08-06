@@ -13,25 +13,33 @@ const Header = ({ showBackButton = false }) => {
   };
 
   return (
-    <HeaderContainer>
-      {showBackButton && (
-        <BackButton onClick={handleBackClick}>
-          <img src={backImage} alt="뒤로가기 버튼" />
-        </BackButton>
-      )}
-      <Logo src={logoImage} alt="로고" />
-    </HeaderContainer>
+    <Container>
+      <HeaderContainer>
+        {showBackButton && (
+          <BackButton onClick={handleBackClick}>
+            <img src={backImage} alt="뒤로가기 버튼" />
+          </BackButton>
+        )}
+        <Logo src={logoImage} alt="로고" />
+      </HeaderContainer>
+    </Container>
   );
 };
 
 export default Header;
+
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
+`;
 
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   width: 390px;
   height: 63px;
-  background-color: #f8f8f8;
+  background-color: #E3ECF1;
   padding: 0 10px;
   box-sizing: border-box;
 `;
