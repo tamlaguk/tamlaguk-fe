@@ -4,18 +4,24 @@ import KakaoLogin from "react-kakao-login";
 import BaseImage from "../images/base2.png";
 import Airplanin from "../images/airplain.png";
 import Kakaologin from "../images/kakaologin.png";
-import Tabbar from "../components/tabbar.js";
 
 const LoginPage = () => {
   const handleKakaoLoginSuccess = (response) => {
     console.log(response);
-    // 로그인 성공 후 처리할 로직을 추가하세요
+    const { profile, access_token } = response;
+    console.log("사용자 프로필: ", profile);
+    // 토큰을 로컬 스토리지에 저장
+    localStorage.setItem("kakao_token", access_token);
+    // /main 페이지로 이동
+    window.location.href = "/main";
   };
 
   const handleKakaoLoginFailure = (error) => {
     console.error(error);
-    // 로그인 실패 시 처리할 로직을 추가하세요
+    alert("로그인에 실패했습니다!");
   };
+
+  console.log("Kakao JS Key: ", process.env.REACT_APP_KAKAO_JS_KEY); // 디버깅 코드 추가
 
   return (
     <Container>
@@ -23,7 +29,7 @@ const LoginPage = () => {
       <AirplaneImage src={Airplanin} alt="airplane" />
       <LoginButtonWrapper>
         <KakaoButton
-          token="<YOUR_KAKAO_APP_KEY>"
+          token={process.env.REACT_APP_KAKAO_JS_KEY} // 환경 변수 사용
           onSuccess={handleKakaoLoginSuccess}
           onFailure={handleKakaoLoginFailure}
           buttonText="카카오로 로그인"

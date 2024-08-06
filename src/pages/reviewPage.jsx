@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import Header from "../components/header.js";
 import styled, { keyframes } from "styled-components";
 import ReviewImage from "../images/reviewbase.png";
@@ -6,8 +7,11 @@ import NextImage from "../images/next.png";
 import TypewriterText from "../components/typewriter";
 import ExampleAudio from "../images/예시.m4a";
 import Tabbar from "../components/tabbar.js";
+import axios from "axios";
 
 const ReviewPage = () => {
+  const location = useLocation(); // location 객체 사용
+  const { data, type } = location.state || {}; // 전달받은 데이터와 타입 추출
   const [placeName, setPlaceName] = useState("");
   const [text, setText] = useState("");
   const [audioSrc, setAudioSrc] = useState("");
@@ -15,7 +19,11 @@ const ReviewPage = () => {
   const [showSearchButton, setShowSearchButton] = useState(false);
   const [audioEnded, setAudioEnded] = useState(false);
   const audioRef = useRef(null);
-
+  useEffect(() => {
+    if (data) {
+      setReviewData(data, type);
+    }
+  }, [data, type]);
   const mockData = [
     {
       name: "서울타워",
@@ -34,24 +42,29 @@ const ReviewPage = () => {
     },
   ];
 
-  const fetchData = async () => {
-    const randomIndex = Math.floor(Math.random() * mockData.length);
-    const data = mockData[randomIndex];
-
-    setPlaceName(data.name);
-    setText(data.text);
-    setAudioSrc(data.audio);
+  const setReviewData = (data, type) => {
+    switch (type) {
+      case "tour":
+        setPlaceName(data.placeStoreName);
+        break;
+      case "food":
+        setPlaceName(data.foodStoreName);
+        break;
+      default:
+        setPlaceName(data.activityStoreName);
+        break;
+    }
+    setText(data.textContent);
+    setAudioSrc(data.voiceContentUrl);
     setAudioEnded(false);
   };
 
   const handleButtonClick = () => {
     setShowButton(false);
     setShowSearchButton(true);
-    fetchData().then(() => {
-      if (audioRef.current) {
-        audioRef.current.play();
-      }
-    });
+    if (audioRef.current) {
+      audioRef.current.play();
+    }
   };
 
   const handleSearchClick = () => {
@@ -63,9 +76,15 @@ const ReviewPage = () => {
 
   const handleNextClick = async () => {
     if (audioEnded) {
-      await fetchData();
-      if (audioRef.current) {
-        audioRef.current.play();
+      try {
+        const response = await axios.get(`/${type}-review?category=${data.category}`);
+        console.log("Next data:", response.data);
+        setReviewData(response.data, type);
+        if (audioRef.current) {
+          audioRef.current.play();
+        }
+      } catch (error) {
+        console.error("Error fetching next data:", error);
       }
     }
   };
