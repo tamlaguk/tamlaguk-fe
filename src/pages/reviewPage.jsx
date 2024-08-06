@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Header from "../components/header.js";
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import ReviewImage from "../images/reviewbase.png";
 import NextImage from "../images/next.png";
 import TypewriterText from '../components/typewriter';
@@ -11,20 +11,39 @@ const ReviewPage = () => {
   const [text, setText] = useState('');
   const [audioSrc, setAudioSrc] = useState('');
   const [showButton, setShowButton] = useState(true);
+  const [showSearchButton, setShowSearchButton] = useState(false);
   const audioRef = useRef(null);
 
-  const fetchData = async () => {
-    const name = "서울타워"; // 예시 데이터
-    const fetchedText = "강아지 귀여워 귀여운건 힐링 힐링은 좋아"; // 예시 데이터
-    const audioFile = ExampleAudio; // 예시 데이터
+  const mockData = [
+    {
+      name: "서울타워",
+      text: "강아지 귀여워 귀여운건 힐링 힐링은 좋아",
+      audio: ExampleAudio
+    },
+    {
+      name: "경복궁",
+      text: "궁전의 아름다움, 역사의 숨결을 느끼다",
+      audio: ExampleAudio
+    },
+    {
+      name: "한강공원",
+      text: "도시 속 자연, 휴식과 힐링의 공간",
+      audio: ExampleAudio
+    }
+  ];
 
-    setPlaceName(name);
-    setText(fetchedText);
-    setAudioSrc(audioFile);
+  const fetchData = async () => {
+    const randomIndex = Math.floor(Math.random() * mockData.length);
+    const data = mockData[randomIndex];
+
+    setPlaceName(data.name);
+    setText(data.text);
+    setAudioSrc(data.audio);
   };
 
   const handleButtonClick = () => {
     setShowButton(false);
+    setShowSearchButton(true);
     fetchData().then(() => {
       if (audioRef.current) {
         audioRef.current.play();
@@ -54,21 +73,32 @@ const ReviewPage = () => {
         <TextContainer>
           <TypewriterText fullText={text} />
         </TextContainer>
-        <SearchButtonContainer>
-          <SearchButton onClick={handleSearchClick}>
-            {placeName} 검색하기
-          </SearchButton>
-        </SearchButtonContainer>
+        {showSearchButton && (
+          <SearchButtonContainer>
+            <SearchButton onClick={handleSearchClick}>
+              {placeName} 바로가기
+            </SearchButton>
+          </SearchButtonContainer>
+        )}
         {showButton && (
-          <ButtonContainer>
-            <ConfirmButton onClick={handleButtonClick}>오디오 재생</ConfirmButton>
-          </ButtonContainer>
+          <ButtonOverlay>
+            <ConfirmButton onClick={handleButtonClick}>시작하기!</ConfirmButton>
+          </ButtonOverlay>
         )}
       </BackgroundContainer>
       <audio ref={audioRef} src={audioSrc} />
     </Container>
   );
 };
+
+const bounce = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+`;
 
 const Container = styled.div`
   display: flex;
@@ -123,7 +153,7 @@ const SearchButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 260px;
-  z-index: 3;
+  z-index: 4;
 `;
 
 const SearchButton = styled.button`
@@ -136,7 +166,6 @@ const SearchButton = styled.button`
   border-radius: 50px;
   cursor: pointer;
   font-size: 20px;
-  z-index: 4;
 `;
 
 const NextButton = styled.img`
@@ -150,26 +179,29 @@ const NextButton = styled.img`
   z-index: 2;
 `;
 
-const ButtonContainer = styled.div`
+const ButtonOverlay = styled.div`
   position: absolute;
-  top: calc(50% + 50px);
-  left: calc(50% - 75px);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
   display: flex;
+  align-items: center;
   justify-content: center;
-  width: 150px;
-  z-index: 4;
+  z-index: 3;
 `;
 
 const ConfirmButton = styled.button`
-  width: 100%;
-  height: 50px;
-  padding: 8px 16px;
-  background-color: #007BFF;
+  padding: 15px 30px;
+  background-color: #FCD354;
   color: white;
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
+  z-index: 4;
+  animation: ${bounce} 1s infinite;
 `;
 
 export default ReviewPage;
