@@ -4,9 +4,11 @@ import Header from "./header";
 import micImage from "../images/micicon.png";
 import notRecordingImage from "../images/notRecording.png";
 import recordingImage from "../images/Recording.png";
-import stopvoiceImage from "../images/stopVoice.png"
-import { useRef, useState,useEffect } from "react";
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import stopvoiceImage from "../images/stopVoice.png";
+import { useRef, useState, useEffect } from "react";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 const SearchModal = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -23,7 +25,7 @@ const SearchModal = () => {
     transcript,
     listening,
     resetTranscript,
-    browserSupportsSpeechRecognition
+    browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
 
   useEffect(() => {
@@ -78,10 +80,51 @@ const SearchModal = () => {
     setIsRecording(false);
     clearInterval(timerRef.current);
   };
+  const handleConfirmClick = async () => {
+    let uploadUrl = "";
+    if (category === "맛집") {
+      uploadUrl = `http://localhost:8081/food-reviewposts?name=${encodeURIComponent(
+        inputValue
+      )}`;
+    } else if (category === "레저") {
+      uploadUrl = `http://localhost:8081/activity-review?name=${encodeURIComponent(
+        inputValue
+      )}`;
+    } else if (category === "관광지") {
+      uploadUrl = `http://localhost:8081/place-review?name=${encodeURIComponent(
+        inputValue
+      )}`;
+    }
+    try {
+      const response = await fetch(uploadUrl, {
+        method: "GET",
+      });
+
+      if (response.ok) {
+        console.log("GET 요청 성공");
+      } else {
+        console.error("GET 요청 실패");
+      }
+    } catch (error) {
+      console.error("Error making GET request:", error);
+    }
+  };
+  const toggleListening = () => {
+    if (listening) {
+      SpeechRecognition.stopListening();
+    } else {
+      resetTranscript();
+      SpeechRecognition.startListening({ continuous: true, language: "ko" });
+    }
+  };
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>브라우저가 지원하지 않는 기능입니다.</span>;
+  }
 
   const uploadAudio = async () => {
     if (audioUrl) {
-      const audioBlob = await fetch(audioUrl).then((r) => r.blob());
+      const audioBlob = await fetch(audioUrl).then((res) => res.blob());
       const formData = new FormData();
       formData.append("file", audioBlob, "recording.wav");
 
@@ -110,70 +153,37 @@ const SearchModal = () => {
     }
   };
 
-  const handleConfirmClick = async () => {
-    let uploadUrl = "";
-    if (category === "맛집") {
-      uploadUrl = "http://localhost:8081/food-review/";
-    } else if (category === "레저") {
-      uploadUrl = "http://localhost:8081/activity-review/";
-    } else if (category === "관광지") {
-      uploadUrl = "http://localhost:8081/place-review/";
-    }
-
-    try {
-      const response = await fetch(uploadUrl, {
-        method: "GET",
-      });
-
-      if (response.ok) {
-        console.log("GET 요청 성공");
-      } else {
-        console.error("GET 요청 실패");
-      }
-    } catch (error) {
-      console.error("Error making GET request:", error);
-    }
-  };
-  const toggleListening = () => {
-    if (listening) {
-      SpeechRecognition.stopListening();
-    } else {
-      resetTranscript();
-      SpeechRecognition.startListening({ continuous: true, language: 'ko' });
-    }
-  };
-
-  if (!browserSupportsSpeechRecognition) {
-    return <span>Browser doesn't support speech recognition.</span>;
-  }
   return (
     <Container>
       <Wrap>
         <CategoryButtons>
-          <CategoryButton
+          <StyledCategoryButton
             onClick={() => setCategory("맛집")}
-            isActive={category === "맛집"}
+            active={category === "맛집" ? "true" : "false"}
           >
             맛집
-          </CategoryButton>
-          <CategoryButton
+          </StyledCategoryButton>
+          <StyledCategoryButton
             onClick={() => setCategory("레저")}
-            isActive={category === "레저"}
+            active={category === "레저" ? "true" : "false"}
           >
             레저
-          </CategoryButton>
-          <CategoryButton
+          </StyledCategoryButton>
+          <StyledCategoryButton
             onClick={() => setCategory("관광지")}
-            isActive={category === "관광지"}
+            active={category === "관광지" ? "true" : "false"}
           >
             관광지
-          </CategoryButton>
+          </StyledCategoryButton>
         </CategoryButtons>
         <SearchInputBox>
           {/* <a href="https://www.flaticon.com/kr/free-icons/" title="마이크 아이콘">마이크 아이콘 제작자: Kiranshastry - Flaticon</a> */}
           <MicContainer>
-          <VoiceButton onClick={toggleListening}>
-              <img src={listening ? stopvoiceImage : micImage} alt="원하는 곳 검색" />
+            <VoiceButton onClick={toggleListening}>
+              <img
+                src={listening ? stopvoiceImage : micImage}
+                alt="원하는 곳 검색"
+              />
             </VoiceButton>
           </MicContainer>
           <h1>정확한 명칭을 말해주세요</h1>
@@ -182,12 +192,17 @@ const SearchModal = () => {
           <h2>"흑돈가"</h2>
         </SearchInputBox>
         <ShowInputBox>
-          <Input 
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          <Input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
           />
-          <Button onClick={handleConfirmClick}>확인</Button>
+          <Button
+            onClick={handleConfirmClick}
+            disabled={listening ? true : false}
+          >
+            확인
+          </Button>
         </ShowInputBox>
         {isRecording && <div>{timeLeft}s</div>}
         {audioUrl && (
@@ -195,16 +210,23 @@ const SearchModal = () => {
             <audio src={audioUrl} controls />
           </div>
         )}
-        <RecordButton onClick={startRecording} disabled={isRecording || inputValue==""}>
+        <RecordButton
+          onClick={startRecording}
+          disabled={listening || isRecording || inputValue == ""}
+        >
           <img
-            src={isRecording||inputValue=="" ? notRecordingImage : recordingImage}
+            src={
+              listening || isRecording || inputValue == ""
+                ? notRecordingImage
+                : recordingImage
+            }
             alt="녹음 버튼"
           />
         </RecordButton>
         <ButtonContainer>
-          <button onClick={uploadAudio} disabled={!audioUrl}>
+          <UploadButton onClick={uploadAudio} disabled={!audioUrl}>
             업로드
-          </button>
+          </UploadButton>
         </ButtonContainer>
       </Wrap>
     </Container>
@@ -235,7 +257,7 @@ const CategoryButtons = styled.div`
   width: 100%;
 `;
 
-const CategoryButton = styled.button`
+const StyledCategoryButton = styled.button`
   background-color: white;
   border: none;
   padding: 10px 20px;
@@ -243,8 +265,8 @@ const CategoryButton = styled.button`
   cursor: pointer;
   font-size: 16px;
 
-  ${({ isActive }) =>
-    isActive &&
+  ${({ active }) =>
+    active === "true" &&
     `
       background-color: lightgray;
       font-weight: bold;
@@ -323,14 +345,15 @@ const ButtonContainer = styled.button`
   margin-top: 10px;
   border: 0px;
   background-color: transparent;
-  button {
-    background-color: white;
-    width: 60px;
-    height: 40px;
-    border-radius: 12px;
-    border: 0px;
-    margin: 10px;
-    font-size: 15px;
-    cursor: pointer;
-  }
+`;
+
+const UploadButton = styled.button`
+  background-color: white;
+  width: 60px;
+  height: 40px;
+  border-radius: 12px;
+  border: 0px;
+  margin: 10px;
+  font-size: 15px;
+  cursor: pointer;
 `;
