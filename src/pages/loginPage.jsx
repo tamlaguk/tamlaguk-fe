@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import KakaoLogin from 'react-kakao-login';
 import Header from "../components/header.js";
-import BaseImage from "../uploads/base.png";
-import Kakaologin from "../uploads/kakaologin.png";
+import BaseImage from "../images/base.png";
+import Kakaologin from "../images/kakaologin.png";
 
 const LoginPage = () => {
   const handleKakaoLoginSuccess = (response) => {
@@ -49,8 +49,6 @@ const Container = styled.div`
 const BackgroundImage = styled.img`
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
   height: 100%;
   object-fit: cover;
 `;
@@ -62,6 +60,7 @@ const LoginButtonWrapper = styled.div`
   justify-content: center;
   width: 100%;
   height: 100%;
+  margin-top:200px;
 `;
 
 const KakaoButton = styled(KakaoLogin)`
@@ -71,6 +70,6 @@ const KakaoButton = styled(KakaoLogin)`
 `;
 
 const KakaoImage = styled.img`
-  width: 100px; // 원하는 크기로 설정하세요
+  width: 180px;
   height: auto;
 `;
