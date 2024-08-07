@@ -106,9 +106,9 @@ const ReviewPage = () => {
           {audioEnded && (
             <NextButton src={NextImage} alt="next" onClick={handleNextClick} />
           )}
-          <TextContainer>
+          {/* <TextContainer>
             <TypewriterText fullText={text} />
-          </TextContainer>
+          </TextContainer> */}
           {showSearchButton && (
             <SearchButtonContainer>
               <SearchButton onClick={handleSearchClick}>
