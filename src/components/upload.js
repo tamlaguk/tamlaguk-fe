@@ -104,16 +104,12 @@ const SearchModal = () => {
 
       if (response.ok) {
         const data = await response.json();
-        if(data.sentiment=="부정적"){ // 고쳐야됨~~~~~~~~~~~~~~~~~~~~~~~
-          alert("부적절한 표현이나 언어가 섞여있어 등록이 불가합니다.")
-        }else{
-          setPostid(data.postid);
-          setResponseOk(true);
-          console.log("GET 요청 성공");
-        }
+        setPostid(data.postid);
+        setResponseOk(true);
+        console.log("GET 요청 성공");
       } else {
         setResponseOk(false);
-        alert("카테고리나 명칭 확인을 다시 한 번 해주세요")
+        alert("카테고리나 명칭 확인을 다시 한 번 해주세요");
         console.error("GET 요청 실패");
       }
     } catch (error) {
@@ -229,9 +225,7 @@ const SearchModal = () => {
           >
             <img
               src={
-                listening || isRecording
-                  ? notRecordingImage
-                  : recordingImage
+                listening || isRecording ? notRecordingImage : recordingImage
               }
               alt="녹음 버튼"
             />
