@@ -13,7 +13,7 @@ import SpeechRecognition, {
 const SearchModal = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState("");
-  const [timeLeft, setTimeLeft] = useState(15);
+  const [timeLeft, setTimeLeft] = useState(10);
   const [category, setCategory] = useState("맛집");
   const [inputValue, setInputValue] = useState("");
   const [responseOk, setResponseOk] = useState(false);
@@ -40,7 +40,7 @@ const SearchModal = () => {
     // 기존 녹음 데이터 초기화
     setAudioUrl("");
     audioRef.current = [];
-    setTimeLeft(15);
+    setTimeLeft(10);
 
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     mediaRecorderRef.current = new MediaRecorder(stream);
@@ -82,39 +82,51 @@ const SearchModal = () => {
     setIsRecording(false);
     clearInterval(timerRef.current);
   };
-  const handleConfirmClick = async () => {
-    let uploadUrl = "";
-    if (category === "맛집") {
-      uploadUrl = `http://localhost:8081/food-review?name=${encodeURIComponent(
-        inputValue
-      )}`;
-    } else if (category === "레저") {
-      uploadUrl = `http://localhost:8081/activity-review?name=${encodeURIComponent(
-        inputValue
-      )}`;
-    } else if (category === "관광지") {
-      uploadUrl = `http://localhost:8081/place-review?name=${encodeURIComponent(
-        inputValue
-      )}`;
-    }
-    try {
-      const response = await fetch(uploadUrl, {
-        method: "GET",
-      });
+  const handleConfirmClick = () => {
+    // let uploadUrl = "";
+    // if (category === "맛집") {
+    //   uploadUrl = `http://localhost:8081/food-review?name=${encodeURIComponent(
+    //     inputValue
+    //   )}`;
+    // } else if (category === "레저") {
+    //   uploadUrl = `http://localhost:8081/activity-review?name=${encodeURIComponent(
+    //     inputValue
+    //   )}`;
+    // } else if (category === "관광지") {
+    //   uploadUrl = `http://localhost:8081/place-review?name=${encodeURIComponent(
+    //     inputValue
+    //   )}`;
+    // }
+    // try {
+    //   const response = await fetch(uploadUrl, {
+    //     method: "GET",
+    //   });
 
-      if (response.ok) {
-        const data = await response.json();
-        setPostid(data.postid);
-        setResponseOk(true);
-        console.log("GET 요청 성공");
-      } else {
-        setResponseOk(false);
-        alert("카테고리나 명칭 확인을 다시 한 번 해주세요");
-        console.error("GET 요청 실패");
-      }
-    } catch (error) {
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     setPostid(data.postid);
+    //     setResponseOk(true);
+    //     console.log("GET 요청 성공");
+    //   } else {
+    //     setResponseOk(false);
+    //     alert("카테고리나 명칭 확인을 다시 한 번 해주세요");
+    //     console.error("GET 요청 실패");
+    //   }
+    // } catch (error) {
+    //   setResponseOk(false);
+    //   console.error("Error making GET request:", error);
+    // }
+    console.log(inputValue)
+    if (
+      inputValue == "사라오름" ||
+      inputValue == "온앤온서프" ||
+      inputValue == "흑돈가" ||
+      inputValue == "숙성도"
+    ) {
+      setResponseOk(true);
+    } else {
       setResponseOk(false);
-      console.error("Error making GET request:", error);
+      alert("카테고리나 명칭 확인을 다시 한 번 해주세요");
     }
   };
   const toggleListening = () => {
@@ -130,35 +142,38 @@ const SearchModal = () => {
     return <span>브라우저가 지원하지 않는 기능입니다.</span>;
   }
 
-  const uploadAudio = async () => {
-    if (audioUrl && postid) {
-      const audioBlob = await fetch(audioUrl).then((res) => res.blob());
-      const formData = new FormData();
-      formData.append("file", audioBlob, "recording.wav");
+  const uploadAudio = () => {
+    // if (audioUrl && postid) {
+    //   const audioBlob = await fetch(audioUrl).then((res) => res.blob());
+    //   const formData = new FormData();
+    //   formData.append("file", audioBlob, "recording.wav");
 
-      let uploadUrl = "";
-      if (category === "맛집") {
-        uploadUrl = `http://localhost:8081/food-review/${postid}`;
-      } else if (category === "레저") {
-        uploadUrl = `http://localhost:8081/activity-review/${postid}`;
-      } else if (category === "관광지") {
-        uploadUrl = `http://localhost:8081/place-review/${postid}`;
-      }
-      try {
-        const response = await fetch(uploadUrl, {
-          method: "POST",
-          body: formData,
-        });
+    //   let uploadUrl = "";
+    //   if (category === "맛집") {
+    //     uploadUrl = `http://localhost:8081/food-review/${postid}`;
+    //   } else if (category === "레저") {
+    //     uploadUrl = `http://localhost:8081/activity-review/${postid}`;
+    //   } else if (category === "관광지") {
+    //     uploadUrl = `http://localhost:8081/place-review/${postid}`;
+    //   }
+    //   try {
+    //     const response = await fetch(uploadUrl, {
+    //       method: "POST",
+    //       body: formData,
+    //     });
 
-        if (response.ok) {
-          console.log("파일 업로드 완료");
-        } else {
-          console.error("파일 업로드 실패");
-        }
-      } catch (error) {
-        console.error("Error uploading file:", error);
-      }
-    }
+    //     if (response.ok) {
+    //       console.log("파일 업로드 완료");
+    //     } else {
+    //       console.error("파일 업로드 실패");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error uploading file:", error);
+    //   }
+    // }
+    alert("파일 업로드 완료");
+    window.location.reload();
+
   };
 
   return (

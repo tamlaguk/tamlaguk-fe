@@ -18,14 +18,15 @@ const FoodPage = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = async (category) => {
-    try {
-      const response = await axios.get(`http://localhost:8081/food-review?category=${category}`);
-      console.log("Response data:", response.data); // 응답 데이터 콘솔에 출력
-      const filteredData = response.data;
-      navigate("/review", { state: { data: filteredData, type: "food" } });
-    } catch (error) {
-      console.error("Error fetching data:", error); // 오류 콘솔에 출력
-    }
+    navigate("/review");
+    // try {
+    //   const response = await axios.get(`http://localhost:8081/food-review?category=${category}`);
+    //   console.log("Response data:", response.data); // 응답 데이터 콘솔에 출력
+    //   const filteredData = response.data;
+    //   navigate("/review", { state: { data: filteredData, type: "food" } });
+    // } catch (error) {
+    //   console.error("Error fetching data:", error); // 오류 콘솔에 출력
+    // }
   };
 
   return (

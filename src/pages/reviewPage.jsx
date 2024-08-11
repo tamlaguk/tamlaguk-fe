@@ -1,97 +1,84 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect, useRef } from 'react';
 import Header from "../components/header.js";
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes } from 'styled-components';
 import ReviewImage from "../images/reviewbase.png";
 import NextImage from "../images/next.png";
-import TypewriterText from "../components/typewriter";
-import ExampleAudio from "../images/예시.m4a";
-import Tabbar from "../components/tabbar.js";
-import axios from "axios";
+import TypewriterText from '../components/typewriter';
+import Example1Audio from "../images/삼미흑돼지.m4a";
+import Example2Audio from "../images/모다정.m4a";
+import Example3Audio from "../images/앙끄레국수.m4a";
+import Example4Audio from "../images/황금어장.m4a";
+import Tabbar from '../components/tabbar.js';
 
 const ReviewPage = () => {
-  const location = useLocation(); // location 객체 사용
-  const { data, type } = location.state || {}; // 전달받은 데이터와 타입 추출
-  const [placeName, setPlaceName] = useState("");
-  const [text, setText] = useState("");
-  const [audioSrc, setAudioSrc] = useState("");
+  const [placeName, setPlaceName] = useState('');
+  const [text, setText] = useState('');
+  const [audioSrc, setAudioSrc] = useState('');
   const [showButton, setShowButton] = useState(true);
   const [showSearchButton, setShowSearchButton] = useState(false);
   const [audioEnded, setAudioEnded] = useState(false);
   const audioRef = useRef(null);
-  useEffect(() => {
-    if (data) {
-      setReviewData(data, type);
-    }
-  }, [data, type]);
+
   const mockData = [
     {
-      name: "서울타워",
-      text: "강아지 귀여워 귀여운건 힐링 힐링은 좋아",
-      audio: ExampleAudio,
+      name: "삼미흑돼지",
+      audio: Example1Audio
     },
     {
-      name: "경복궁",
-      text: "궁전의 아름다움, 역사의 숨결을 느끼다",
-      audio: ExampleAudio,
+      name: "앙끄레국수",
+      audio: Example3Audio,
     },
     {
-      name: "한강공원",
-      text: "도시 속 자연, 휴식과 힐링의 공간",
-      audio: ExampleAudio,
+      name: "모다정",
+      audio: Example2Audio,
     },
+    {
+      name: "앙끄레국수",
+      audio: Example3Audio,
+    },
+    {
+      name: "황금어장",
+      audio: Example4Audio,
+    }
   ];
 
-  const setReviewData = (data, type) => {
-    switch (type) {
-      case "tour":
-        setPlaceName(data.placeStoreName);
-        break;
-      case "food":
-        setPlaceName(data.foodStoreName);
-        break;
-      default:
-        setPlaceName(data.activityStoreName);
-        break;
-    }
-    setText(data.textContent);
-    setAudioSrc(data.voiceContentUrl);
+  const fetchData = async () => {
+    const randomIndex = Math.floor(Math.random() * mockData.length);
+    const data = mockData[randomIndex];
+
+    setPlaceName(data.name);
+    setText(data.text);
+    setAudioSrc(data.audio);
     setAudioEnded(false);
   };
 
   const handleButtonClick = () => {
     setShowButton(false);
     setShowSearchButton(true);
-    if (audioRef.current) {
-      audioRef.current.play();
-    }
+    fetchData().then(() => {
+      if (audioRef.current) {
+        audioRef.current.play();
+      }
+    });
   };
 
   const handleSearchClick = () => {
-    const kakaoUrl = `https://map.kakao.com/?q=${encodeURIComponent(
-      placeName
-    )}`;
+    const kakaoUrl = `https://map.kakao.com/?q=${encodeURIComponent(placeName)}`;
     window.location.href = kakaoUrl;
   };
 
   const handleNextClick = async () => {
     if (audioEnded) {
-      try {
-        const response = await axios.get(`/${type}-review?category=${data.category}`);
-        console.log("Next data:", response.data);
-        setReviewData(response.data, type);
-        if (audioRef.current) {
-          audioRef.current.play();
-        }
-      } catch (error) {
-        console.error("Error fetching next data:", error);
+      await fetchData();
+      if (audioRef.current) {
+        audioRef.current.play();
       }
     }
   };
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.addEventListener("ended", () => {
+      audioRef.current.addEventListener('ended', () => {
         setAudioEnded(true);
       });
     }
@@ -99,34 +86,32 @@ const ReviewPage = () => {
 
   return (
     <>
-      <Container>
-        <Header showBackButton={true} />
-        <BackgroundContainer>
-          <BackgroundImage src={ReviewImage} alt="background" />
-          {audioEnded && (
-            <NextButton src={NextImage} alt="next" onClick={handleNextClick} />
-          )}
-          {/* <TextContainer>
-            <TypewriterText fullText={text} />
-          </TextContainer> */}
-          {showSearchButton && (
-            <SearchButtonContainer>
-              <SearchButton onClick={handleSearchClick}>
-                {placeName} 바로가기
-              </SearchButton>
-            </SearchButtonContainer>
-          )}
-          {showButton && (
-            <ButtonOverlay>
-              <ConfirmButton onClick={handleButtonClick}>
-                시작하기!
-              </ConfirmButton>
-            </ButtonOverlay>
-          )}
-        </BackgroundContainer>
-        <audio ref={audioRef} src={audioSrc} />
-      </Container>
-      <Tabbar />
+    <Container>
+      <Header showBackButton={true} />
+      <BackgroundContainer>
+        <BackgroundImage src={ReviewImage} alt="background" />
+        {audioEnded && (
+          <NextButton src={NextImage} alt="next" onClick={handleNextClick} />
+        )}
+        <TextContainer>
+          <TypewriterText fullText={text} />
+        </TextContainer>
+        {showSearchButton && (
+          <SearchButtonContainer>
+            <SearchButton onClick={handleSearchClick}>
+              {placeName} 바로가기
+            </SearchButton>
+          </SearchButtonContainer>
+        )}
+        {showButton && (
+          <ButtonOverlay>
+            <ConfirmButton onClick={handleButtonClick}>시작하기!</ConfirmButton>
+          </ButtonOverlay>
+        )}
+      </BackgroundContainer>
+      <audio ref={audioRef} src={audioSrc} />
+    </Container>
+    <Tabbar />
     </>
   );
 };
@@ -187,15 +172,16 @@ const SearchButtonContainer = styled.div`
 `;
 
 const SearchButton = styled.button`
-  width: 200px;
-  height: 50px;
-  padding: 8px 16px;
-  background-color: #fff;
-  color: black;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: 17px;
+
+    width: 200px;
+    height: 50px;
+    padding: 8px 16px;
+    background-color: #fff;
+    color: black;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 17px;
 `;
 
 const NextButton = styled.img`
@@ -225,7 +211,7 @@ const ButtonOverlay = styled.div`
 
 const ConfirmButton = styled.button`
   padding: 15px 30px;
-  background-color: #fcd354;
+  background-color: #FCD354;
   color: white;
   border: none;
   border-radius: 50px;
